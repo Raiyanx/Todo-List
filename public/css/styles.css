@@ -7,6 +7,7 @@ body {
     flex-direction: column;
     align-items: center;
     background-color: aliceblue;
+    justify-content: space-around;
 }
 
 .title {
@@ -22,10 +23,16 @@ input {
     width: 500px;
 }
 
-div {
-    background-color: rgb(210, 232, 251);
-    margin: 10px;
-    font-size: 20px;
-    width: 500px;
-    text-align: center;
+.login {
+    width: 250px;
+    height: 170px;
+    background-color:rgb(135, 214, 236);
+    font-size: 25px;
+    color: rgb(7, 55, 68);
+}
+
+.button-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
 }

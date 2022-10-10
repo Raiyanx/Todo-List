@@ -9,19 +9,13 @@
 </head>
 <body>
     <h1 class="title">
-        Todo-List
+        Welcome to Todo-List!
     </h1>
-    <form action="/" method="post" autocomplete="off">
-        <input type="text" placeholder="Add todos..." name="todoValue" required>
-        <button type="submit" class="submitbutton">Add</button>
-    </form>
- 
-    <% if(data) {  %>
-      <%  data.forEach(todoValue =>  { %>
-        <% console.log(todoValue) %>
-        <div> <%= todoValue.todo %> </div> 
-    <% })   %>
-    <%    }  %>
 
+    <div class="button-container">
+        <a href="/profile"><button class="login">Login/Signup</button></a> 
+        <a href="/guest"><button class="login">Continue as Guest</button></a>
+    </div>
+ 
 </body>
 </html>

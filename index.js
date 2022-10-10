@@ -12,7 +12,23 @@ app.set("view engine", "ejs")
 app.use(express.static("public"))
 app.use(bodyParser.urlencoded({extended : true }))
 app.use(bodyParser.json())
- 
+
+
+const { auth, requiresAuth } = require('express-openid-connect');
+
+const config = {
+  authRequired: false,
+  auth0Logout: true,
+  secret: process.env.SECRET,
+  baseURL: 'http://localhost:3000',
+  clientID: 'cCrHWPL7GYn0NdAm3MWSyxqVRiYpsAHg',
+  issuerBaseURL: 'https://dev-p1sz-sew.us.auth0.com'
+};
+
+// auth router attaches /login, /logout, and /callback routes to the baseURL
+app.use(auth(config));
+
+
 const dbName = process.env.DBNAME;
 const dbPassword = process.env.DBPASSWORD
 const dbUser = process.env.DBUSER;
@@ -42,7 +58,19 @@ app.post("/", (req, res) => {
         })
 })
 
-app.get("/todolist", )
+app.get("/guest", (req, res) => {
+    Todo.find()
+        .then(result => {
+            res.render("guest", { data: result })
+        })
+})
+
+app.get("/profile", requiresAuth(), (req, res) => {
+    Todo.find()
+        .then(result => {
+            res.render("profile", { data: result })
+        })
+}) 
 
 app.listen(port, () => {
     console.log(`server is running at ${port}`)
