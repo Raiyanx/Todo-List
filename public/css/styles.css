@@ -29,6 +29,11 @@ input {
     background-color:rgb(135, 214, 236);
     font-size: 25px;
     color: rgb(7, 55, 68);
+    cursor: pointer;
+}
+
+.login:hover {
+    background-color: rgb(91, 180, 204);
 }
 
 .button-container {

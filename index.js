@@ -2,7 +2,7 @@ const express = require("express")
 const app = express()
 const bodyParser = require("body-parser")
 const mongoose = require("mongoose")
-const Todo = require("./models/todo")
+const User = require("./models/user")
 const dotenv = require("dotenv")
 
 const port = process.env.PORT | 3000;
@@ -41,36 +41,55 @@ mongoose.connect(dburl)
 })
 .catch(err => console.log(err));
 
+
 app.get("/", (req, res) => {
-    Todo.find()
-        .then(result => {
-            res.render("index", { data: result })
-        })
+    res.render("index")
 })
  
-app.post("/", (req, res) => {
-    const todo = new Todo({
-        todo: req.body.todoValue
-    })
-    todo.save()
-        .then(result => {
-            res.redirect("/")
-        })
-})
+
+/*
 
 app.get("/guest", (req, res) => {
-    Todo.find()
+    Todo.find({})
         .then(result => {
+            console.log(result);
             res.render("guest", { data: result })
         })
 })
+*/
+
 
 app.get("/profile", requiresAuth(), (req, res) => {
-    Todo.find()
+    
+    User.exists({ sub: req.oidc.user.sub })
         .then(result => {
-            res.render("profile", { data: result })
+            if(!result){
+                console.log("here");
+                const newUser = new User({
+                    sub: req.oidc.user.sub,
+                    todos: []
+                }) 
+                newUser.save();
+                res.render("profile", {data : newUser.todos })
+            }
+            else{
+                User.findOne({ sub: req.oidc.user.sub })
+                .then(result => {
+                    console.log(result);
+                    res.render("profile", { data: result.todos })
+                 })                
+            }
         })
+
 }) 
+
+
+app.post("/profile", (req, res) => {
+    User.updateOne({ sub: req.oidc.user.sub }, { $push: { todos: req.body.todoValue }  })
+        .then(result => {
+            res.redirect("/profile")
+        })
+})
 
 app.listen(port, () => {
     console.log(`server is running at ${port}`)
