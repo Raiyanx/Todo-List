@@ -2,25 +2,60 @@
     box-sizing: border-box;
 }
 
+:root {
+    --background-colour: aliceblue;
+    --primary-colour: rgb(30, 137, 166);
+    --secondary-colour: rgb(15, 95, 117);
+}
+
 body {
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
-    background-color: aliceblue;
+    background-color: var(--background-colour);
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}
+
+#welcomeMessage {
+    color: var(--primary-colour);
+}
+
+.todobar {
+    display: flex;
+    flex-direction: row;
     justify-content: space-around;
+    width: 100vw;
 }
 
-.title {
-    color: rgb(30, 137, 166);
-    font-size: 40px;
+.todobar > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-form, input, button {
-    height: 40px;
-    font-size: 20px;
+form {
+    display: flex;
+    flex-direction: column;
 }
+
+form > textarea {
+    height: 30vh;
+    font-size: larger;
+}
+
+form > div {
+    margin-top: 5px;
+    display: flex;
+    flex-direction: row;
+}
+
+
 input {
-    width: 500px;
+    width: 80%;
+    margin-right: 5px;
 }
 
 .login {
@@ -40,4 +75,41 @@ input {
     width: 100%;
     display: flex;
     justify-content: space-around;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.listitem {
+    display: flex;
+    flex-direction: column;
+    margin: 15px;
+}
+
+.work, .dead {
+    border-top: 1px solid rgb(7, 55, 68);
+    border-left: 1px solid rgb(7, 55, 68);
+    border-right: 1px solid rgb(7, 55, 68);
+    border-radius: 1px;
+    padding: 2px;
+}
+
+.work {
+    font-size: larger;
+    width: 500px;
+    min-height: 100px;
+}
+
+.deletebutton {
+    height: 30px;
+}
+
+label {
+    margin: auto;
+    width: 100px;
+    text-align: center;
 }

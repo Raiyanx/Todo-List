@@ -8,23 +8,66 @@
     <title>Todo List</title>
 </head>
 <body>
-    <h1 class="title">
-        Todo-List
+    <h1 id="welcomeMessage">
+        Welcome, <%= user.name %>
     </h1>
-    <form action="/profile" method="post" autocomplete="off">
-        <input type="text" placeholder="Add todos..." name="todoValue" required>
-        <button type="submit" class="submitbutton">Add</button>
-    </form>
- 
+    <div class="todobar">
+        <div>
+            <h1>Add a new todo...</h1>
+            <form action="/profile" method="post" autocomplete="off">
+                <textarea rows="" cols="50" type="text" placeholder="Add todos..." name="workValue" required></textarea>
+                <div>
+                    <label>Deadline: </label>
+                    <input type="datetime-local" min="<%= new Date() %>" placeholder="Select Deadline..." name="deadValue" required>
+                    <button type="submit" class="submitbutton">Add new todo</button>
+                </div>
+            </form>
+        </div>
+        <div>
+            <h1>Your current list of todos</h1>
+            <div class="list">
+                <% if(data) { 
+                  data.sort((a,b) => { return (a.deadline < b.deadline) ? -1 : 1 }).forEach(todoValue =>  { %>
+                    <div class="listitem">
+                        <div class="work"><%= todoValue.work %></div>
+                        <div class="dead">Deadline: 
+                            <%  let d = todoValue.deadline 
+                             function joinzero(x){ return (x > 9) ? x : ('0'+x) } 
+                             let months = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec" ] 
+                            %>
+                            <%= months[d.getMonth()]  + " " + 
+                                d.getDate() + ", " + 
+                                d.getFullYear() + ", " + 
+                                (
+                                  d.getHours() <= 9 ? joinzero(d.getHours()) :
+                                 d.getHours() <= 12 ? d.getHours() :
+                                 d.getHours()-12    
+                                ) + ":" + 
+                                joinzero(d.getMinutes()) + " " +
+                                (d.getHours() >= 12 ? "PM" : "AM" )  %>
+                        </div>
+                        <button class="deletebutton  <%= todoValue._id %> ">Remove Todo</button>
+                    </div>
+                <% })   
+                }  %>
+            </div>
+        </div>
+    </div>
+    <script>
+        const deleteButtons = document.querySelectorAll(".deletebutton")
 
-    <% if(data) {  %>
-      <%  data.forEach(todoValue =>  { %>
-        <% console.log(todoValue) %>
-        <div class="listitem" > <%= todoValue %> </div> 
-    <% })   %>
-    <%    }  %>
+        deleteButtons.forEach((button, i) => {
+            button.addEventListener("click", () => {
+                const endpoint = `/${button.classList[1]}`
+                fetch(endpoint, {
+                    method: "DELETE"
+                }).then(
+                    window.location.href = "/profile"
+                )
+            })
+        })
 
-    
- 
+    </script>
+
 </body>
 </html>

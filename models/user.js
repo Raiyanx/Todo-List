@@ -7,7 +7,16 @@ const userSchema = new Schema({
         required: true
     }, 
     todos: {
-        type: [String],
+        type: [{
+            work: {
+                type: String,
+                required: true
+            },
+            deadline: {
+                type: Date,
+                required: true
+            }
+        }],
         required: true
     }
 })

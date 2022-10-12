@@ -20,18 +20,17 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: process.env.SECRET,
-  baseURL: 'http://localhost:3000',
-  clientID: 'cCrHWPL7GYn0NdAm3MWSyxqVRiYpsAHg',
-  issuerBaseURL: 'https://dev-p1sz-sew.us.auth0.com'
-};
+  baseURL: process.env.BASEURL,
+  clientID: process.env.CLIENTID,
+  issuerBaseURL: process.env.ISSUER
+}; 
 
-// auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(config));
 
 
 const dbName = process.env.DBNAME;
 const dbPassword = process.env.DBPASSWORD
-const dbUser = process.env.DBUSER;
+const dbUser = process.env.DBUSER; 
 
  
 const dburl = `mongodb+srv://${dbUser}:${dbPassword}@cluster0.khluax3.mongodb.net/${dbName}?retryWrites=true&w=majority`
@@ -43,54 +42,54 @@ mongoose.connect(dburl)
 
 
 app.get("/", (req, res) => {
+    if(req.oidc.isAuthenticated())
+        res.redirect("/profile")
     res.render("index")
 })
  
-
-/*
-
-app.get("/guest", (req, res) => {
-    Todo.find({})
-        .then(result => {
-            console.log(result);
-            res.render("guest", { data: result })
-        })
-})
-*/
-
-
 app.get("/profile", requiresAuth(), (req, res) => {
     
     User.exists({ sub: req.oidc.user.sub })
         .then(result => {
             if(!result){
-                console.log("here");
                 const newUser = new User({
                     sub: req.oidc.user.sub,
                     todos: []
                 }) 
                 newUser.save();
-                res.render("profile", {data : newUser.todos })
+                res.render("profile", {data : newUser.todos, user: req.oidc.user })
             }
             else{
                 User.findOne({ sub: req.oidc.user.sub })
                 .then(result => {
-                    console.log(result);
-                    res.render("profile", { data: result.todos })
+                    res.render("profile", { data: result.todos, user: req.oidc.user  })
                  })                
             }
         })
 
 }) 
-
+ 
 
 app.post("/profile", (req, res) => {
-    User.updateOne({ sub: req.oidc.user.sub }, { $push: { todos: req.body.todoValue }  })
+    User.updateOne({ sub: req.oidc.user.sub }, 
+                    { $push: { todos: {
+                                work: req.body.workValue,
+                                deadline: req.body.deadValue 
+                            }}  })
         .then(result => {
             res.redirect("/profile")
         })
 })
 
+app.delete("/:id", (req, res) => {
+    User.updateOne({ sub: req.oidc.user.sub }, 
+        { $pull: { todos: {
+                    _id: new mongoose.Types.ObjectId(req.params.id)
+                }}  })
+    .then(
+    )
+})
+
 app.listen(port, () => {
     console.log(`server is running at ${port}`)
-})
+}) 
