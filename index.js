@@ -5,7 +5,7 @@ const mongoose = require("mongoose")
 const User = require("./models/user")
 const dotenv = require("dotenv")
 
-const port = process.env.PORT | 3000;
+const port = process.env.PORT || 3000;
 dotenv.config();
 
 app.set("view engine", "ejs")
