@@ -8,7 +8,7 @@
     <title>Todo List</title>
 </head>
 <body>
-    <h1 id="welcomeMessage">
+    <h1 id="welcomeMessage" >
         Welcome, <%= user.name %>
     </h1>
     <a href="/logout"><button class="logout">Logout</button></a>
@@ -18,8 +18,8 @@
             <form action="/profile" method="post" autocomplete="off">
                 <textarea rows="" cols="50" type="text" placeholder="Add todos..." name="workValue" required></textarea>
                 <div>
-                    <label>Deadline: </label>
-                    <input type="datetime-local" min="<%= new Date() %>" placeholder="Select Deadline..." name="deadValue" required>
+                    <label>Deadline: </label> 
+                    <input type="datetime-local" placeholder="Select Deadline..." name="deadValue" required>
                     <button type="submit" class="submitbutton">Add new todo</button>
                 </div>
             </form>
@@ -27,7 +27,7 @@
         <div>
             <h1>Your current list of todos</h1>
             <div class="list">
-                <% if(data) { 
+                <% if(data && data.length > 0) { 
                   data.sort((a,b) => { return (a.deadline < b.deadline) ? -1 : 1 }).forEach(todoValue =>  { %>
                     <div class="listitem">
                         <div class="work"><%= todoValue.work %></div>
@@ -50,7 +50,9 @@
                         <button class="deletebutton  <%= todoValue._id %> ">Remove Todo</button>
                     </div>
                 <% })   
-                }  %>
+                } else {    %>
+                    <div class="notodo">----Empty----</div>
+                 <% } %>
             </div>
         </div>
     </div>

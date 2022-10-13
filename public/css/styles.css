@@ -6,6 +6,7 @@
     --background-colour: aliceblue;
     --primary-colour: rgb(30, 137, 166);
     --secondary-colour: rgb(15, 95, 117);
+    --border-colour: rgb(7, 55, 68);
 }
 
 body {
@@ -19,8 +20,9 @@ body {
     margin: 0;
 }
 
-#welcomeMessage {
+h1 {
     color: var(--primary-colour);
+    font-size: 40px;
 }
 
 .todobar {
@@ -81,6 +83,8 @@ input {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    border: 2px solid var(--border-colour);
+    min-width: 500px;
 }
 
 
@@ -91,9 +95,9 @@ input {
 }
 
 .work, .dead {
-    border-top: 1px solid rgb(7, 55, 68);
-    border-left: 1px solid rgb(7, 55, 68);
-    border-right: 1px solid rgb(7, 55, 68);
+    border-top: 1px solid var(--border-colour);
+    border-left: 1px solid var(--border-colour);
+    border-right: 1px solid var(--border-colour);
     border-radius: 1px;
     padding: 2px;
 }
@@ -128,4 +132,10 @@ label {
 
 .logout:hover {
     background-color: rgb(91, 180, 204);
+}
+
+.notodo {
+    font-size: 30px;
+    color: var(--secondary-colour);
+    text-align: center;
 }
